@@ -70,7 +70,7 @@ plt.show()
 import pandas as pd
 
 # Define a dictionary
-my_dict = {'Deepak': 49, 'Gowtham': 76, 'Mohith': 39}
+my_dict = {'D': 49, 'E': 76, 'F': 39}
 
 # Convert the dictionary to a Pandas series
 my_series = pd.Series(my_dict)
