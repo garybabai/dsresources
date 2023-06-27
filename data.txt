@@ -1,0 +1,378 @@
+dict to df: df = pd.DataFrame.from_dict(data_dict, orient='index')
+----------------
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy .stats as stats 
+import math
+----------------
+mu = avg_monthly_rainfall.mean(axis=0)
+variance = var_monthly_rainfall.mean(axis=0)
+sigma = math.sqrt(variance)
+x = np.linspace(mu - 3*sigma, mu + 3*sigma, 100)
+plt.plot(x, stats.norm.pdf (x, mu, sigma))
+pit.show ()
+----------------
+import matplotlib.pyplot as plt
+import seaborn as sns
+----------------
+sns.displot(total_rainfall, kde=True)
+----------------
+winter_avg = df[['Dec', 'Jan', 'Feb', 'Mar']].mean(axis=1)
+summer_avg = df[['Apr', 'May', 'June']].mean(axis=1)
+monsoon_avg = df[['July', 'Aug', 'Sep']].mean(axis=1)
+retreating_monsoon_avg = df[['Oct', 'Nov']].mean(axis=1)
+
+plt.plot(summer_avg.index, summer_avg.values, label='Summer')
+plt.plot(retreating_monsoon_avg.index, retreating_monsoon_avg.values, label='Retreating Monsoon')
+plt.legend()
+----------------
+## 3. Write a Python program to plot two or more lines with legends, different widths, and colors.
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Create data for the lines
+x = np.arange(0, 5, 0.1)
+y1 = np.sqrt(x)
+y2 = np.power(x, 2)
+y3 = np.exp(-x)
+
+# Plot the lines
+plt.plot(x, y1, color='blue', linewidth=2, label='Square Root')
+plt.plot(x, y2, color='red', linewidth=3, label='Square')
+plt.plot(x, y3, color='green', linewidth=2, linestyle='--', label='Exponential')
+
+# Add title and legends
+plt.title("Three Line Segments")
+plt.legend(loc='upper right')
+
+# Show the plot
+plt.show()
+----------------------
+## 4. Write a Python programming to display a horizontal bar chart of the popularity of programming
+import matplotlib.pyplot as plt
+
+# Programming languages and their popularity
+languages = ['Java', 'Python', 'PHP', 'JavaScript', 'C#', 'C++']
+popularity = [22.2, 17.6, 8.8, 8, 7.7, 6.7]
+
+# Create horizontal bar chart
+plt.barh(languages, popularity)
+
+# Add labels and title
+plt.xlabel('Popularity')
+plt.ylabel('Programming Languages')
+plt.title('Popularity of Programming Languages')
+
+# Show the chart
+plt.show()
+-------------------
+## 7. Write a Pandas program to convert a dictionary to a Pandas series.
+import pandas as pd
+
+# Define a dictionary
+my_dict = {'Deepak': 49, 'Gowtham': 76, 'Mohith': 39}
+
+# Convert the dictionary to a Pandas series
+my_series = pd.Series(my_dict)
+
+# Print the series
+print(my_series)
+
+--------------------
+## 8. Write a Pandas program to convert a series of lists into one series.
+import pandas as pd
+
+# Define a series of lists
+my_series = pd.Series([[1, 2, 3], [4, 5], [6, 7, 8, 9]])
+
+# Convert the series of lists to a single series
+new_series = my_series.explode()
+
+# Print the new series
+print(new_series)
+----------------
+#Superimposing aluminium and acrylic accelerations. The number of readings may vary. In order to superimpose plots use the
+# same data length. Say for example the first seven thousand data in each case.
+mat1_x_acc=al_x_acc[1:7000]
+mat2_x_acc=ac_x_acc[1:7000]
+mat3_x_acc=ms_x_acc[1:7000]
+X = np.arange(1, 7000, 1)
+plt.plot(X, mat1_x_acc, color='orange', label='Al')
+plt.plot(X, mat2_x_acc, color='g', label='Ac')
+plt.plot(X, mat3_x_acc, color='blue',label="Ms")
+plt.legend()
+plt.title('Along x-axis',loc="left")
+-------------------
+# feature extraction
+FEATURES = ['MIN','MAX','MEAN','RMS','VAR','STD','POWER','PEAK','P2P','CREST FACTOR','SKEW','KURTOSIS',
+            'MAX_f','SUM_f','MEAN_f','VAR_f','PEAK_f','SKEW_f','KURTOSIS_f']
+
+def features_extraction(df): 
+    
+    
+    Min=[];Max=[];Mean=[];Rms=[];Var=[];Std=[];Power=[];Peak=[];Skew=[];Kurtosis=[];P2p=[];CrestFactor=[];
+    FormFactor=[]; PulseIndicator=[];
+    Max_f=[];Sum_f=[];Mean_f=[];Var_f=[];Peak_f=[];Skew_f=[];Kurtosis_f=[]
+    #freq=100
+    
+    X = df.values
+    ## TIME DOMAIN ##
+
+    Min.append(np.min(X))
+    Max.append(np.max(X))
+    Mean.append(np.mean(X))
+    Rms.append(np.sqrt(np.mean(X**2)))
+    Var.append(np.var(X))
+    Std.append(np.std(X))
+    Power.append(np.mean(X**2))
+    Peak.append(np.max(np.abs(X)))
+    P2p.append(np.ptp(X))
+    CrestFactor.append(np.max(np.abs(X))/np.sqrt(np.mean(X**2)))
+    Skew.append(stats.skew(X))
+    Kurtosis.append(stats.kurtosis(X))
+    FormFactor.append(np.sqrt(np.mean(X**2))/np.mean(X))
+    PulseIndicator.append(np.max(np.abs(X))/np.mean(X))
+    ## FREQ DOMAIN ## 
+    ft = fft(X)
+    #ft[1].plot(figsize = [15,8])
+    S = np.abs(ft**2)/len(df)
+    Max_f.append(np.max(S))
+    Sum_f.append(np.sum(S))
+    Mean_f.append(np.mean(S))
+    Var_f.append(np.var(S))
+    
+    Peak_f.append(np.max(np.abs(S)))
+    Skew_f.append(stats.skew(X))
+    Kurtosis_f.append(stats.kurtosis(X))
+    #Create dataframe from features
+    df_features = pd.DataFrame(index = [FEATURES], 
+                               data = [Min,Max,Mean,Rms,Var,Std,Power,Peak,P2p,CrestFactor,Skew,Kurtosis,
+                                       Max_f,Sum_f,Mean_f,Var_f,Peak_f,Skew_f,Kurtosis_f])
+    return df_features
+
+---------------
+FFT =np.fft.fft(al_x_acc)
+new_N=int(len(FFT)/2) 
+f_nat=700
+new_X = np.linspace(10**-12, f_nat/2, new_N, endpoint=True)
+new_Xph=1.0/(new_X)
+FFT_abs_al_x=np.abs(FFT)
+plt.plot(new_Xph,2*FFT_abs_al_x[0:int(len(FFT)/2.)]/len(new_Xph),color='black')
+plt.xlabel('Period ($h$)',fontsize=20)
+plt.ylabel('Amplitude',fontsize=20)
+plt.title('(Fast) Fourier Transform Method Algorithm',fontsize=20)
+plt.grid(True)
+plt.xlim(0,200)
+---------------
+# Getting the frequency components using FFT
+
+fft_abs = 2*FFT_abs_al_x[0:int(len(FFT)/2.)]/len(new_Xph)
+fft_abs = pd.DataFrame(fft_abs, columns = ['Amplitude'])
+fft_sorted = fft_abs.sort_values(by='Amplitude',ascending=False).head(20)
+fft_sorted
+--------------
+FFT =np.fft.fft(al_y_acc)
+new_N=int(len(FFT)/2) 
+f_nat=700
+new_X = np.linspace(10**-12, f_nat/2, new_N, endpoint=True)
+new_Xph=1.0/(new_X)
+FFT_abs_al_y=np.abs(FFT)
+plt.plot(new_Xph,2*FFT_abs_al_y[0:int(len(FFT)/2.)]/len(new_Xph),color='black')
+plt.xlabel('Period ($h$)',fontsize=20)
+plt.ylabel('Amplitude',fontsize=20)
+plt.title('(Fast) Fourier Transform Method Algorithm',fontsize=20)
+plt.grid(True)
+plt.xlim(0,200)
+--------------
+# Getting the frequency components using FFT
+
+fft_abs = 2*FFT_abs_ms_z[0:int(len(FFT)/2.)]/len(new_Xph)
+fft_abs = pd.DataFrame(fft_abs, columns = ['Amplitude'])
+fft_sorted = fft_abs.sort_values(by='Amplitude',ascending=False).head(20)
+fft_sorted
+--------------
+# Detrending a signal
+al_x_detrend = signal.detrend(al_x_acc)
+sample_array = al_x_acc.index
+plt.figure(figsize=(12,6))
+plt.plot(sample_array, al_x_detrend,color='firebrick',label='Detrended Signal')
+plt.plot(sample_array, al_x_acc, color='navy',label='Raw Signal')
+plt.legend()
+plt.title("Aluminium")
+--------------
+import pandas as pd
+import numpy as np 
+
+df = pd.DataFrame({'foo': ['one', 'one', 'one', 'two', 'two','two'],
+      'bar': ['A', 'B', 'C', 'A', 'B', 'C'],
+      'baz': [1, 2, 3, 4, 5, 6],
+      'zoo': ['x', 'y', 'z', 'q', 'w', 't']})
+print("Original Dataframe")
+print(df)
+print('\n')
+print('Reshaped')
+print(df.pivot(index ='foo', columns = 'bar', values = 'baz'))
+print('\n')
+-------------
+2.	Write a program to calculate total sales for the 2nd week of January for each location.
+week= ['1/8/2023','1/9/2023','1/10/2023','1/11/2023','1/12/2023','1/13/2023','1/14/2023']
+sum = df[week].sum(axis=1)
+week_sales = pd.DataFrame(list(zip(df['Location'], sum)),columns =['Location', 'Sum'])
+week_sales
+-----------------
+
+>>> np.zeros((3,4)) Create an array of zeros
+>>> np.ones((2,3,4),dtype=np.int16) Create an array of ones
+>>> d = np.arange(10,25,5) Create an array of evenly spaced values (step value)
+>>> np.linspace(0,2,9) Create an array of evenly
+ spaced values (number of samples)
+>>> e = np.full((2,2),7) Create a constant array
+>>> f = np.eye(2) Create a 2X2 identity matrix
+>>> np.random.random((2,2)) Create an array with random values
+>>> np.empty((3,2)) Create an empty array
+
+>>> a = np.array([1,2,3])
+>>> b = np.array([(1.5,2,3), (4,5,6)], dtype = float)
+>>> c = np.array([[(1.5,2,3), (4,5,6)], [(3,2,1), (4,5,6)]],
+ dtype = float)
+
+>>> np.save('my_array', a)
+>>> np.savez('array.npz', a, b)
+>>> np.load('my_array.npy')
+
+>>> np.loadtxt("myfile.txt")
+>>> np.genfromtxt("my_file.csv", delimiter=',')
+>>> np.savetxt("myarray.txt", a, delimiter=" ")
+
+>>> np.int64 Signed 64-bit integer types
+>>> np.float32 Standard double-precision floating point
+>>> np.complex Complex numbers represented by 128 floats
+>>> np.bool Boolean type storing TRUE and FALSE values
+>>> np.object Python object type
+>>> np.string_ Fixed-length string type
+>>> np.unicode_ Fixed-length unicode type
+
+>>> a.shape Array dimensions
+>>> len(a) Length of array
+>>> b.ndim Number of array dimensions
+>>> e.size Number of array elements
+>>> b.dtype Data type of array elements
+>>> b.dtype.name Name of data type
+>>> b.astype(int) Convert an array to a different type
+
+>>> np.info(np.ndarray.dtype)
+
+>>> g = a - b Subtraction
+ array([[-0.5, 0. , 0. ],
+ [-3. , -3. , -3. ]])
+>>> np.subtract(a,b) Subtraction
+>>> b + a Addition
+ array([[ 2.5, 4. , 6. ],
+ [ 5. , 7. , 9. ]])
+>>> np.add(b,a) Addition
+>>> a / b Division
+ array([[ 0.66666667, 1. , 1. ],
+ [ 0.25 , 0.4 , 0.5 ]])
+>>> np.divide(a,b) Division
+>>> a * b Multiplication
+ array([[ 1.5, 4. , 9. ],
+ [ 4. , 10. , 18. ]])
+>>> np.multiply(a,b) Multiplication
+>>> np.exp(b) Exponentiation
+>>> np.sqrt(b) Square root
+>>> np.sin(a) Print sines of an array
+>>> np.cos(b) Element-wise cosine
+>>> np.log(a) Element-wise natural logarithm
+>>> e.dot(f) Dot product
+ array([[ 7., 7.],
+ [ 7., 7.]])
+
+>>> a == b Element-wise comparison
+ array([[False, True, True],
+ [False, False, False]], dtype=bool)
+>>> a < 2 Element-wise comparison
+ array([True, False, False], dtype=bool)
+>>> np.array_equal(a, b) Array-wise comparison
+
+>>> a.sum() Array-wise sum
+>>> a.min() Array-wise minimum value
+>>> b.max(axis=0) Maximum value of an array row
+>>> b.cumsum(axis=1) Cumulative sum of the elements
+>>> a.mean() Mean
+>>> b.median() Median
+>>> a.corrcoef() Correlation coefficient
+>>> np.std(b) Standard deviation
+
+>>> h = a.view() Create a view of the array with the same data
+>>> np.copy(a) Create a copy of the array
+>>> h = a.copy() Create a deep copy of the array
+
+
+>>> a.sort() Sort an array
+>>> c.sort(axis=0) Sort the elements of an array's axis
+
+Subsetting
+>>> a[2] Select the element at the 2nd index 3
+>>> b[1,2] Select the element at row 1 column 2
+ 6.0 (equivalent to b[1][2])
+ Slicing
+>>> a[0:2] Select items at index 0 and 1
+ array([1, 2])
+>>> b[0:2,1] Select items at rows 0 and 1 in column 1
+ array([ 2., 5.])
+
+>>> b[:1] Select all items at row 0
+ array([[1.5, 2., 3.]]) (equivalent to b[0:1, :])
+>>> c[1,...] Same as [1,:,:]
+ array([[[ 3., 2., 1.],
+ [ 4., 5., 6.]]])
+>>> a[ : :-1] Reversed array a array([3, 2, 1])
+ Boolean Indexing
+>>> a[a<2] Select elements from a less than 2
+ array([1])
+ Fancy Indexing
+>>> b[[1, 0, 1, 0],[0, 1, 2, 0]] Select elements (1,0),(0,1),(1,2) and (0,0)
+ array([ 4. , 2. , 6. , 1.5])
+>>> b[[1, 0, 1, 0]][:,[0,1,2,0]] Select a subset of the matrix’s rows
+ array([[ 4. ,5. , 6. , 4. ], and columns
+ [ 1.5, 2. , 3. , 1.5],
+ [ 4. , 5. , 6. , 4. ],
+ [ 1.5, 2. , 3. , 1.5]])
+
+ Transposing Array
+>>> i = np.transpose(b) Permute array dimensions
+>>> i.T Permute array dimensions
+ Changing Array Shape
+>>> b.ravel() Flatten the array
+>>> g.reshape(3,-2) Reshape, but don’t change data
+ Adding/Removing Elements
+>>> h.resize((2,6)) Return a new array with shape (2,6)
+>>> np.append(h,g) Append items to an array
+>>> np.insert(a, 1, 5) Insert items in an array
+>>> np.delete(a,[1]) Delete items from an array
+ Combining Arrays
+>>> np.concatenate((a,d),axis=0) Concatenate arrays
+ array([ 1, 2, 3, 10, 15, 20])
+>>> np.vstack((a,b)) Stack arrays vertically (row-wise)
+ array([[ 1. , 2. , 3. ],
+ [ 1.5, 2. , 3. ],
+ [ 4. , 5. , 6. ]])
+>>> np.r_[e,f] Stack arrays vertically (row-wise)
+>>> np.hstack((e,f)) Stack arrays horizontally (column-wise)
+ array([[ 7., 7., 1., 0.],
+ [ 7., 7., 0., 1.]])
+>>> np.column_stack((a,d)) Create stacked column-wise arrays
+ array([[ 1, 10],
+ [ 2, 15],
+ [ 3, 20]])
+>>> np.c_[a,d] Create stacked column-wise arrays
+ Splitting Arrays
+>>> np.hsplit(a,3) Split the array horizontally at the 3rd
+ [array([1]),array([2]),array([3])] index
+>>> np.vsplit(c,2) Split the array vertically at the 2nd index
+[array([[[ 1.5, 2. , 1. ],
+ [ 4. , 5. , 6. ]]]),
+ array([[[ 3., 2., 3.],
+ [ 4., 5., 6.]]])]
+
+
